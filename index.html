@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #count,
+      #element {
+        visibility: hidden;
+      }
+
+      #element {
+        height: 50px;
+        width: 50px;
+        background-color: #000;
+        border: 1px solid black;
+      }
+    </style>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="section__hero">
+      <div id="count"></div>
+      <div id="element"></div>
+      <button id="btn__start" onclick="start()">Start</button>
+      <button id="btn__stop" onclick="stop()">Stop</button>
+    </div>
+  </body>
+  <script>
+    const colors = ["#000", "#fff", "#FFFF00", "#ff0000"];
+    const startBtn = document.getElementById("btn__start");
+    const stopBtn = document.getElementById("btn__stop");
+    const element = document.getElementById("element");
+    const count = document.getElementById("count");
+    let answers = [];
+    let elementCount = 0;
+    let interval;
+    let isStopped = false;
+
+    function start() {
+      if (isStopped) {
+        reset();
+        startBtn.innerHTML = "Start";
+        stopBtn.innerHTML = "Stop";
+        element.style.visibility = "hidden";
+        count.style.visibility = "hidden";
+      } else {
+        element.style.visibility = "visible";
+        count.style.visibility = "visible";
+        changeElementColour();
+        interval = setInterval(changeElementColour, 2000);
+      }
+    }
+
+    function stop() {
+      clearInterval(interval);
+      startBtn.innerHTML = "Reset";
+      stopBtn.innerHTML = "View Answers";
+      isStopped = true;
+    }
+
+    function reset() {
+      isStopped = false;
+      answers = [];
+      elementCount = 0;
+    }
+
+    function changeElementColour() {
+      const newElement = colors[Math.floor(Math.random() * colors.length)];
+      element.style.backgroundColor = newElement;
+      answers.push(newElement);
+      elementCount++;
+      count.innerHTML = elementCount;
+    }
+  </script>
+</html>
