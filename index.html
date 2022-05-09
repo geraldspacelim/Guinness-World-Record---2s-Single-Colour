@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       #count,
-      #element {
+      #element,
+      #btn__answer,
+      #countdownTimer {
         visibility: hidden;
       }
 
@@ -21,57 +23,104 @@
   </head>
   <body>
     <div class="section__hero">
-      <div id="count"></div>
-      <div id="element"></div>
-      <button id="btn__start" onclick="start()">Start</button>
-      <button id="btn__stop" onclick="stop()">Stop</button>
+      <div class="section__recall">
+        <div id="count"></div>
+        <div id="element"></div>
+      </div>
+
+      <div class="section__btns">
+        <button id="btn__action" onclick="action()">Start</button>
+        <a href="answer.html" id="btn__answer"">Answer</a>
+      </div>
+      <div id="countdownTimer"></div>
     </div>
   </body>
   <script>
     const colors = ["#000", "#fff", "#FFFF00", "#ff0000"];
-    const startBtn = document.getElementById("btn__start");
-    const stopBtn = document.getElementById("btn__stop");
+    const btnsSect = document.getElementsByClassName("section__btns");
+    const recallSect = document.getElementsByClassName("section__recall");
+    const verfiySect = document.getElementsByClassName("section__verify");
+    const actionBtn = document.getElementById("btn__action");
+    const answerBtn = document.getElementById("btn__answer");
     const element = document.getElementById("element");
     const count = document.getElementById("count");
-    let answers = [];
-    let elementCount = 0;
+    const countdownTimer = document.getElementById("countdownTimer");
     let interval;
-    let isStopped = false;
+    let answers = {};
+    let nextState = "Start";
+    let countdownValue = 4;
+    let elementCount = 0;
+    let isCountdown = false;
+
+    function action() {
+      switch (nextState) {
+        case "Start":
+          start();
+          break;
+        case "Stop":
+          stop();
+          break;
+        case "Reset":
+          reset();
+          break;
+      }
+    }
 
     function start() {
-      if (isStopped) {
-        reset();
-        startBtn.innerHTML = "Start";
-        stopBtn.innerHTML = "Stop";
-        element.style.visibility = "hidden";
-        count.style.visibility = "hidden";
-      } else {
+      if (isCountdown) {
+        nextState = "Stop";
+        actionBtn.innerHTML = nextState;
+        actionBtn.style.visibility = "visible";
         element.style.visibility = "visible";
         count.style.visibility = "visible";
         changeElementColour();
         interval = setInterval(changeElementColour, 2000);
+      } else {
+        startCoundown();
       }
     }
 
     function stop() {
       clearInterval(interval);
-      startBtn.innerHTML = "Reset";
-      stopBtn.innerHTML = "View Answers";
-      isStopped = true;
+      nextState = "Reset";
+      actionBtn.innerHTML = nextState;
+      answerBtn.style.visibility = "visible";
+      localStorage.setItem("answers", JSON.stringify(answers));
     }
 
     function reset() {
-      isStopped = false;
       answers = [];
       elementCount = 0;
+      nextState = "Start";
+      actionBtn.innerHTML = nextState;
+      answerBtn.style.visibility = "hidden";
+      element.style.visibility = "hidden";
+      count.style.visibility = "hidden";
+      isCountdown = false;
+      countdownValue = 4;
     }
 
     function changeElementColour() {
       const newElement = colors[Math.floor(Math.random() * colors.length)];
       element.style.backgroundColor = newElement;
-      answers.push(newElement);
+      answers[elementCount] = newElement
       elementCount++;
       count.innerHTML = elementCount;
+    }
+
+    function startCoundown() {
+      actionBtn.style.visibility = "hidden";
+      countdownTimer.style.visibility = "visible";
+      if (countdownValue > 0) {
+        countdownValue--;
+        countdownTimer.innerHTML =
+          countdownValue === 0 ? "Go!" : countdownValue;
+        setTimeout(startCoundown, 1000);
+      } else {
+        countdownTimer.style.visibility = "hidden";
+        isCountdown = true;
+        start();
+      }
     }
   </script>
 </html>
