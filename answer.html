@@ -8,6 +8,28 @@
       .section__answers {
         display: grid;
         grid-template-columns: repeat(10, 1fr);
+        row-gap: 5px;
+      }
+
+      .grid__item {
+        height: 100px;
+        border: 1px solid #000;
+      }
+
+      .item__white {
+        background-color: #fff;
+      }
+
+      .item__yellow {
+        background-color: #ffff00;
+      }
+
+      .item__red {
+        background-color: #ff0000;
+      }
+
+      .item__black {
+        background-color: #000;
       }
     </style>
     <title>Document</title>
@@ -16,9 +38,26 @@
     <div class="section__answers"></div>
   </body>
   <script>
+    const answersDiv = document.querySelector(".section__answers");
     const answers = JSON.parse(localStorage.getItem("answers"));
     for (const [key, value] of Object.entries(answers)) {
       const blockDiv = document.createElement("div");
+      blockDiv.classList.add("grid__item");
+      switch (value) {
+        case "#000":
+          blockDiv.classList.add("item__black");
+          break;
+        case "#fff":
+          blockDiv.classList.add("item__white");
+          break;
+        case "#ffff00":
+          blockDiv.classList.add("item__yellow");
+          break;
+        case "#ff0000":
+          blockDiv.classList.add("item__red");
+          break;
+      }
+      answersDiv.appendChild(blockDiv);
     }
   </script>
 </html>

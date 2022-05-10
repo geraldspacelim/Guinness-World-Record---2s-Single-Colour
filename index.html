@@ -5,6 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      *{
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      }
+
+      #count {
+        font-size: 36px;
+      }
+
+      .section__hero {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+        position: relative;
+      }
+
+      #countdownTimer {
+        position: absolute;
+        font-size: 72px;
+        left: 50%;
+        top: 50%;
+        transform:translate(-50%,-50%)
+      }
+
+      .section__btns {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px
+      }
+
       #count,
       #element,
       #btn__answer,
@@ -13,30 +50,47 @@
       }
 
       #element {
-        height: 50px;
-        width: 50px;
+        height: 150px;
+        width: 75px;
         background-color: #000;
         border: 1px solid black;
+      }
+
+      #btn__action,
+      #btn__answer {
+        padding: 15px 30px;
+        border: none;
+        font-size: 18px;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        /* display: block; */
+      }
+
+      #btn__action {
+        background-color: #332cf2;
+      }
+
+      #btn__answer {
+        background-color: #000;
+        text-decoration: none;
       }
     </style>
     <title>Document</title>
   </head>
   <body>
     <div class="section__hero">
-      <div class="section__recall">
+        <div id="countdownTimer"></div>
         <div id="count"></div>
         <div id="element"></div>
-      </div>
-
       <div class="section__btns">
         <button id="btn__action" onclick="action()">Start</button>
         <a href="answer.html" id="btn__answer"">Answer</a>
-      </div>
-      <div id="countdownTimer"></div>
+      </div> 
     </div>
   </body>
   <script>
-    const colors = ["#000", "#fff", "#FFFF00", "#ff0000"];
+    const colors = ["#000", "#fff", "#ffff00", "#ff0000"];
     const btnsSect = document.getElementsByClassName("section__btns");
     const recallSect = document.getElementsByClassName("section__recall");
     const verfiySect = document.getElementsByClassName("section__verify");
