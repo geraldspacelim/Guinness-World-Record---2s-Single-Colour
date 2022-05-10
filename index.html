@@ -16,6 +16,13 @@
         font-size: 36px;
       }
 
+      .btn__start__psn {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform:translate(-50%,-50%);
+      }
+
       .section__hero {
         height: 100vh;
         display: flex;
@@ -58,7 +65,9 @@
       }
 
       #btn__action,
-      #btn__answer {
+      #btn__answer,
+      #btn__lvl1,
+      #btn__lvl2 {
         padding: 15px 30px;
         border: none;
         font-size: 18px;
@@ -68,7 +77,9 @@
         /* display: block; */
       }
 
-      #btn__action {
+      #btn__action,
+      #btn__lvl1,
+      #btn__lvl2 {
         background-color: #332cf2;
       }
 
@@ -84,6 +95,17 @@
         z-index: 999;
         position: absolute;
       }
+
+      #section__lvl {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform:translate(-50%,-50%);
+        visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
     </style>
     <title>Document</title>
   </head>
@@ -93,9 +115,13 @@
         <div id="count"></div>
         <div id="element"></div>
       <div class="section__btns">
-        <button id="btn__action" onclick="action()">Start</button>
+        <button id="btn__action" class="btn__start__psn" onclick="action()">Start</button>
         <a href="answer.html" id="btn__answer"">Answer</a>
       </div> 
+      <div id="section__lvl">
+        <button id="btn__lvl1" onclick="action(1500)">1.5 Seconds</button>
+        <button id="btn__lvl2" onclick="action(2000)">2 Seconds</button>
+      </div>
       <div id="section__disabler"></div>
     </div>
     
@@ -111,15 +137,21 @@
     const count = document.getElementById("count");
     const countdownTimer = document.getElementById("countdownTimer");
     const disabler = document.getElementById("section__disabler")
+    const selectLvl = document.getElementById("section__lvl")
     let answers = {};
     let nextState = "Start";
     let countdownValue = 4;
     let elementCount = 0;
     let isCountdown = false;
     let isStopped = true
+    let duration = 0;
 
-    function action() {
+    function action(speed) {
       switch (nextState) {
+        case "Level":
+          duration = speed
+          lvl()
+          break;
         case "Start":
           start();
           break;
@@ -132,7 +164,14 @@
       }
     }
 
-   async function start() {
+   function start() {
+      actionBtn.classList.remove("btn__start__psn")
+      actionBtn.style.visibility = "hidden";
+      nextState = "Level"
+      selectLvl.style.visibility = "visible"
+    }
+
+    async function lvl(){
       if (isCountdown) {
         nextState = "Stop";
         actionBtn.innerHTML = nextState;
@@ -143,6 +182,7 @@
         }
         disabler.style.visibility = "hidden"
       } else {
+        selectLvl.style.visibility = "hidden"
         startCoundown();
       }
     }
@@ -161,6 +201,7 @@
     }
 
     function reset() {
+      answers = {}
       elementCount = 0;
       nextState = "Start";
       actionBtn.innerHTML = nextState;
@@ -170,6 +211,8 @@
       isCountdown = false
       countdownValue = 4;
       isStopped = true
+      duration = 0;
+      actionBtn.classList.add("btn__start__psn")
     }
 
     async function changeElementColour() {
@@ -179,7 +222,7 @@
       answers[elementCount] = newElement
       elementCount++;
       count.innerHTML = elementCount;
-      await sleep(2000)
+      await sleep(duration)
       element.style.visibility = "hidden";
       await sleep(50)
     }
@@ -195,7 +238,7 @@
       } else {
         countdownTimer.style.visibility = "hidden";
         isCountdown = true;
-        start();
+        lvl();
       }
     }
   </script>

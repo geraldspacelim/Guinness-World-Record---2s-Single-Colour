@@ -5,6 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+        }
+      }
       .section__answers {
         display: grid;
         grid-template-columns: repeat(10, 1fr);
