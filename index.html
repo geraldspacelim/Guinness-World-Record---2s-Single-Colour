@@ -50,8 +50,8 @@
       }
 
       #element {
-        height: 150px;
-        width: 75px;
+        height: 100px;
+        width: 100px;
         background-color: #000;
         border: 1px solid black;
       }
@@ -99,12 +99,12 @@
     const element = document.getElementById("element");
     const count = document.getElementById("count");
     const countdownTimer = document.getElementById("countdownTimer");
-    let interval;
     let answers = {};
     let nextState = "Start";
     let countdownValue = 4;
     let elementCount = 0;
     let isCountdown = false;
+    let isStopped = true
 
     function action() {
       switch (nextState) {
@@ -120,22 +120,26 @@
       }
     }
 
-    function start() {
+   async function start() {
       if (isCountdown) {
         nextState = "Stop";
         actionBtn.innerHTML = nextState;
         actionBtn.style.visibility = "visible";
-        element.style.visibility = "visible";
         count.style.visibility = "visible";
-        changeElementColour();
-        interval = setInterval(changeElementColour, 2000);
+        while (isStopped) {
+          await changeElementColour()      
+        }
       } else {
         startCoundown();
       }
     }
 
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+
     function stop() {
-      clearInterval(interval);
+      isStopped = false
       nextState = "Reset";
       actionBtn.innerHTML = nextState;
       answerBtn.style.visibility = "visible";
@@ -154,12 +158,16 @@
       countdownValue = 4;
     }
 
-    function changeElementColour() {
+    async function changeElementColour() {
       const newElement = colors[Math.floor(Math.random() * colors.length)];
       element.style.backgroundColor = newElement;
+      element.style.visibility = "visible";
       answers[elementCount] = newElement
       elementCount++;
       count.innerHTML = elementCount;
+      await sleep(2000)
+      element.style.visibility = "hidden";
+      await sleep(50)
     }
 
     function startCoundown() {
