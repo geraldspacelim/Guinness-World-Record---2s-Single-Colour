@@ -45,7 +45,8 @@
       #count,
       #element,
       #btn__answer,
-      #countdownTimer {
+      #countdownTimer,
+      #section__disabler {
         visibility: hidden;
       }
 
@@ -75,6 +76,14 @@
         background-color: #000;
         text-decoration: none;
       }
+
+      #section__disabler {
+        background-color: rgba(0, 0, 0, 0.5);
+        height: 100%;
+        width: 100%;
+        z-index: 999;
+        position: absolute;
+      }
     </style>
     <title>Document</title>
   </head>
@@ -87,7 +96,9 @@
         <button id="btn__action" onclick="action()">Start</button>
         <a href="answer.html" id="btn__answer"">Answer</a>
       </div> 
+      <div id="section__disabler"></div>
     </div>
+    
   </body>
   <script>
     const colors = ["#000", "#fff", "#ffff00", "#ff0000"];
@@ -99,6 +110,7 @@
     const element = document.getElementById("element");
     const count = document.getElementById("count");
     const countdownTimer = document.getElementById("countdownTimer");
+    const disabler = document.getElementById("section__disabler")
     let answers = {};
     let nextState = "Start";
     let countdownValue = 4;
@@ -129,6 +141,7 @@
         while (isStopped) {
           await changeElementColour()      
         }
+        disabler.style.visibility = "hidden"
       } else {
         startCoundown();
       }
@@ -139,6 +152,7 @@
     }
 
     function stop() {
+      disabler.style.visibility = "visible"
       isStopped = false
       nextState = "Reset";
       actionBtn.innerHTML = nextState;
@@ -147,15 +161,15 @@
     }
 
     function reset() {
-      answers = [];
       elementCount = 0;
       nextState = "Start";
       actionBtn.innerHTML = nextState;
       answerBtn.style.visibility = "hidden";
       element.style.visibility = "hidden";
       count.style.visibility = "hidden";
-      isCountdown = false;
+      isCountdown = false
       countdownValue = 4;
+      isStopped = true
     }
 
     async function changeElementColour() {
