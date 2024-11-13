@@ -37,6 +37,18 @@
       .item__black {
         background-color: #000;
       }
+
+      .item__green {
+        background-color: #00ff00;
+      }
+
+      .item__blue {
+        background-color: #0000ff;
+      }
+
+      .item__purple {
+        background-color: #800080;
+      }
     </style>
     <title>Document</title>
   </head>
@@ -61,6 +73,15 @@
           break;
         case "#ff0000":
           blockDiv.classList.add("item__red");
+          break;
+        case "#00ff00": 
+          blockDiv.classList.add("item__green");
+          break;
+        case "#0000ff":
+          blockDiv.classList.add("item__blue");
+          break;
+        case "#800080":
+          blockDiv.classList.add("item__purple");
           break;
       }
       answersDiv.appendChild(blockDiv);
